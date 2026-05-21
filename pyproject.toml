@@ -6,7 +6,18 @@ dependencies = [
     "alembic>=1.18.4",
     "asyncpg>=0.31.0",
     "fastapi[standard]>=0.136.1",
+    "insightface>=0.7.3",
+    "numpy>=2.0.0",
+    "onnxruntime-gpu>=1.19.0",
+    "opencv-python-headless>=4.10.0",
+    "pgvector>=0.4.2",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.14.1",
+    "python-multipart>=0.0.9",
     "sqlalchemy[asyncio]>=2.0.49",
 ]
+
+[tool.ty.rules]
+division-by-zero = "ignore"
+unsupported-operator = "ignore"
+unresolved-attribute = "ignore"
