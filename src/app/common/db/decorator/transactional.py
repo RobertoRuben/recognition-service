@@ -4,17 +4,10 @@ from typing import Callable
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-def transactional(
-    func: Callable | None = None,
-    *,
-    read_only: bool = False
-):
-
+def transactional(func: Callable | None = None, *, read_only: bool = False):
     def decorator(f: Callable):
-
         @wraps(f)
         async def wrapper(self, *args, **kwargs):
-
             session: AsyncSession = self.session
 
             if read_only:
