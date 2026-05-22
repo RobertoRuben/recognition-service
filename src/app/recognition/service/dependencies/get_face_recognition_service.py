@@ -14,8 +14,21 @@ from src.app.recognition.service.interface.face_recognition_service import (
 )
 
 
-def get_face_recognition_service(session: AsyncSessionDep) -> FaceRecognitionService:
-    return FaceRecognitionServiceImpl(FaceEmbeddingRepository(session))
+def get_recognition_face_embedding_repository(
+    session: AsyncSessionDep,
+) -> FaceEmbeddingRepository:
+    return FaceEmbeddingRepository(session)
+
+
+RecognitionFaceEmbeddingRepositoryDep = Annotated[
+    FaceEmbeddingRepository, Depends(get_recognition_face_embedding_repository)
+]
+
+
+def get_face_recognition_service(
+    repository: RecognitionFaceEmbeddingRepositoryDep,
+) -> FaceRecognitionService:
+    return FaceRecognitionServiceImpl(repository)
 
 
 FaceRecognitionServiceDep = Annotated[

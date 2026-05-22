@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from fastapi import UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.common.db.decorator.transactional import transactional
 from src.app.common.exception import (
@@ -32,14 +31,14 @@ from src.app.recognition.service.interface.embedding_service import EmbeddingSer
 
 
 class EmployeeServiceImpl:
+    __session_attr__ = "employee_repository.session"
+
     def __init__(
         self,
-        session: AsyncSession,
         employee_repository: EmployeeRepository,
         face_embedding_repository: FaceEmbeddingRepository,
         embedding_service: EmbeddingService,
     ) -> None:
-        self.session: AsyncSession = session
         self.employee_repository: EmployeeRepository = employee_repository
         self.face_embedding_repository: FaceEmbeddingRepository = face_embedding_repository
         self.embedding_service: EmbeddingService = embedding_service
@@ -76,7 +75,7 @@ class EmployeeServiceImpl:
             ]
         )
 
-        await self.session.refresh(employee, attribute_names=["face_embeddings"])
+        await self.employee_repository.session.refresh(employee, attribute_names=["face_embeddings"])
         return EmployeeWithEmbeddingsResponseDTO.model_validate(employee)
 
     @transactional

@@ -4,7 +4,9 @@ from typing import Any, Protocol, TypeVar
 
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 
-T = TypeVar("T")
+from src.app.common.model.base_model import Base
+
+T = TypeVar("T", bound=Base)
 
 
 class GenericRepository(Protocol[T]):

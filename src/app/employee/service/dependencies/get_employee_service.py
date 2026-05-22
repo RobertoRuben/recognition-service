@@ -14,13 +14,32 @@ from src.app.recognition.service.dependencies.get_embedding_service import (
 )
 
 
+def get_employee_repository(session: AsyncSessionDep) -> EmployeeRepository:
+    return EmployeeRepository(session)
+
+
+EmployeeRepositoryDep = Annotated[EmployeeRepository, Depends(get_employee_repository)]
+
+
+def get_face_embedding_repository(session: AsyncSessionDep) -> FaceEmbeddingRepository:
+    return FaceEmbeddingRepository(session)
+
+
+FaceEmbeddingRepositoryDep = Annotated[
+    FaceEmbeddingRepository, Depends(get_face_embedding_repository)
+]
+
+
 def get_employee_service(
-    session: AsyncSessionDep,
+    employee_repository: EmployeeRepositoryDep,
+    face_embedding_repository: FaceEmbeddingRepositoryDep,
     embedding_service: EmbeddingServiceDep,
 ) -> EmployeeService:
-    employee_repo = EmployeeRepository(session)
-    face_embedding_repo = FaceEmbeddingRepository(session)
-    return EmployeeServiceImpl(session, employee_repo, face_embedding_repo, embedding_service)
+    return EmployeeServiceImpl(
+        employee_repository,
+        face_embedding_repository,
+        embedding_service,
+    )
 
 
 EmployeeServiceDep = Annotated[EmployeeService, Depends(get_employee_service)]
