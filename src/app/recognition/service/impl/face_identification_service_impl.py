@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 
 import numpy as np
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.common.config.base_config import base_config
 from src.app.common.db.decorator.transactional import transactional
@@ -25,15 +24,15 @@ from src.app.recognition.service.interface.face_recognition_service import (
 
 
 class FaceIdentificationServiceImpl:
+    __session_attr__ = "employee_repository.session"
+
     def __init__(
         self,
-        session: AsyncSession,
         embedding_service: EmbeddingService,
         face_recognition_service: FaceRecognitionService,
         annotation_service: AnnotationService,
         employee_repository: EmployeeRepository,
     ) -> None:
-        self.session = session
         self.embedding_service = embedding_service
         self.face_recognition_service = face_recognition_service
         self.annotation_service = annotation_service
