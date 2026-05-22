@@ -23,18 +23,24 @@ from src.app.recognition.service.interface.face_identification_service import (
 )
 
 
+def get_employee_repository(session: AsyncSessionDep) -> EmployeeRepository:
+    return EmployeeRepository(session)
+
+
+EmployeeRepositoryDep = Annotated[EmployeeRepository, Depends(get_employee_repository)]
+
+
 def get_face_identification_service(
-    session: AsyncSessionDep,
     embedding_service: EmbeddingServiceDep,
     face_recognition_service: FaceRecognitionServiceDep,
     annotation_service: AnnotationServiceDep,
+    employee_repository: EmployeeRepositoryDep,
 ) -> FaceIdentificationService:
     return FaceIdentificationServiceImpl(
-        session,
         embedding_service,
         face_recognition_service,
         annotation_service,
-        EmployeeRepository(session),
+        employee_repository,
     )
 
 
