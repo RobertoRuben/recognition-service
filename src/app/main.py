@@ -8,6 +8,7 @@ from src.app.common.exception import (
     problem_details_exception_handler,
 )
 from src.app.employee.controller.employee_controller import router as employee_router
+from src.app.plan.controller.plan_controller import router as plan_router
 from src.app.recognition.controller.recognition_controller import router as recognition_router
 from src.app.recognition.service.dependencies.get_embedding_service import (
     get_embedding_service,
@@ -30,5 +31,6 @@ app = FastAPI(
 app.add_exception_handler(ProblemDetailsException, problem_details_exception_handler)
 
 app.include_router(employee_router)
+app.include_router(plan_router)
 app.include_router(recognition_router)
 
